@@ -8,6 +8,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TrashedFilter;
@@ -19,6 +20,11 @@ class ProductsTable
     {
         return $table
             ->columns([
+                SpatieMediaLibraryImageColumn::make('images')
+                ->collection('images')
+                ->limit(1)
+                ->label('image')
+                ->conversion('thumb'),
                 TextColumn::make('title')
                     ->sortable()
                     ->words(10)

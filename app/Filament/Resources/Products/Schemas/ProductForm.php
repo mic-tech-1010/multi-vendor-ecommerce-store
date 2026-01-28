@@ -91,7 +91,6 @@ class ProductForm
                     ->options(ProductStatusEnum::labels())
                     ->default(ProductStatusEnum::Draft->value)
                     ->required()
-
             ]);
     }
 }
