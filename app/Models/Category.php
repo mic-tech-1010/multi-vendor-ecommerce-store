@@ -10,12 +10,17 @@ class Category extends Model
 {
     use SoftDeletes;
 
-    public function parent (): BelongsTo
+    public function scopeActive($query)
     {
-       return $this->belongsTo(Category::class, 'parent_id');
+        $query->where('active', true);
     }
 
-    public function department (): BelongsTo
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(Category::class, 'parent_id');
+    }
+
+    public function department(): BelongsTo
     {
         return $this->belongsTo(Department::class);
     }

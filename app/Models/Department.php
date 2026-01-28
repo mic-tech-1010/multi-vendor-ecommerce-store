@@ -10,8 +10,13 @@ class Department extends Model
 {
     use SoftDeletes;
 
-    public function categories (): HasMany
+    public function scopeActive($query)
     {
-      return $this->hasMany(Category::class);
+        $query->where('active', true);
+    }
+
+    public function categories(): HasMany
+    {
+        return $this->hasMany(Category::class);
     }
 }
