@@ -3,23 +3,62 @@
 namespace App\Filament\Resources\Products\Pages;
 
 use App\Filament\Resources\Products\ProductResource;
-use Filament\Actions\DeleteAction;
-use Filament\Actions\ForceDeleteAction;
-use Filament\Actions\RestoreAction;
 use Filament\Resources\Pages\EditRecord;
-use Filament\Actions\Action;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Schema;
+use Filament\Actions\DeleteAction;
+use Filament\Support\Icons\Heroicon;
+use BackedEnum;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Notifications\Notification;
+use Filament\Actions\Action;
 
-class EditProduct extends EditRecord
+class ProductSkus extends EditRecord
 {
     protected static string $resource = ProductResource::class;
+
+    protected static ?string $title = 'Product SKUs';
+
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::Briefcase;
+
+    protected static ?string $navigationLabel = "Stock Keeping Unit (SKU)";
+
+    public function form(Schema $schema): Schema
+    {
+        return $schema->components([
+            Repeater::make('skus')
+                ->relationship()
+                ->columns(2)
+                ->columnSpan(2)
+                ->label(false)
+                ->collapsible()
+                ->addable(false)
+                ->defaultItems(1)
+                ->schema([
+                    TextEntry::make('attributeValues.value')
+                        ->label('Combination'),
+                    TextInput::make('price')
+                        ->numeric()
+                        ->required(),
+                    TextInput::make('quantity')
+                        ->integer()
+                        ->minValue(0)
+                        ->required(),
+                ])
+
+        ]);
+    }
+
+    public static function canAccess(array $parameters = []): bool
+    {
+        return $parameters['record']->has_variations;
+    }
 
     protected function getHeaderActions(): array
     {
         return [
             DeleteAction::make(),
-            ForceDeleteAction::make(),
-            RestoreAction::make(),
             Action::make('toggleVariations')
                 ->label(
                     fn() =>
@@ -62,6 +101,7 @@ class EditProduct extends EditRecord
 
                     $this->refreshFormData(['has_variations']);
                 }),
+
         ];
     }
 }

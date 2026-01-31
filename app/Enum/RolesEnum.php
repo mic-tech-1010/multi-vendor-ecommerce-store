@@ -8,5 +8,4 @@ enum RolesEnum: string
     case Vendor = 'vendor';
     case Customer = 'customer';
 
-
 }

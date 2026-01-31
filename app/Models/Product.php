@@ -18,6 +18,10 @@ class Product extends Model implements HasMedia
     use SoftDeletes;
     use InteractsWithMedia;
 
+    protected $casts = [
+        'has_variations' => 'boolean',
+    ];
+
     public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('thumb')
@@ -63,5 +67,10 @@ class Product extends Model implements HasMedia
     public function productAttributes(): HasMany
     {
         return $this->hasMany(ProductAttribute::class);
+    }
+
+    public function skus(): HasMany
+    {
+        return $this->hasMany(ProductSku::class);
     }
 }

@@ -29,4 +29,12 @@ class ProductAttributeValue extends Model implements HasMedia
     {
         return $this->belongsTo(ProductAttribute::class);
     }
+
+    public function skus()
+    {
+        return $this->belongsToMany(
+            ProductSku::class,
+            'product_sku_attribute_value'
+        );
+    }
 }

@@ -28,6 +28,7 @@ return new class extends Migration
             $table->integer('quantity')->nullable();
             $table->string('meta_title')->nullable();
             $table->text('meta_description')->nullable();
+            $table->boolean('has_variations')->default(false)->index();
             $table->foreignIdFor(User::class, 'created_by');
             $table->foreignIdFor(User::class, 'updated_by');
             $table->softDeletes();

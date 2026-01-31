@@ -18,6 +18,10 @@ use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Support\Enums\Alignment;
+use App\Services\ProductSkuGenerator;
+use Illuminate\Validation\ValidationException;
+use Filament\Notifications\Notification;
+use Filament\Actions\Action;
 
 class ProductAttributes extends EditRecord
 {
@@ -78,12 +82,87 @@ class ProductAttributes extends EditRecord
             ]);
     }
 
+    protected function afterSave(): void
+    {
+
+        $product = $this->record;
+
+        // Only for variable products
+        if (! $product->has_variations) {
+            return;
+        }
+
+        try {
+            app(ProductSkuGenerator::class)->generate($product);
+
+            Notification::make()
+                ->title('SKUs updated automatically')
+                ->body('New SKU combinations have been generated.')
+                ->success()
+                ->send();
+        } catch (ValidationException $e) {
+            Notification::make()
+                ->title('SKU generation skipped')
+                ->body(collect($e->errors())->flatten()->implode("\n"))
+                ->warning()
+                ->send();
+        }
+    }
+
+    public static function canAccess(array $parameters = []): bool
+    {
+        return $parameters['record']->has_variations;
+    }
+
     protected function getHeaderActions(): array
     {
         return [
             DeleteAction::make(),
             ForceDeleteAction::make(),
             RestoreAction::make(),
+            Action::make('toggleVariations')
+                ->label(
+                    fn() =>
+                    $this->record->has_variations
+                        ? 'Disable Variations'
+                        : 'Enable Variations'
+                )
+                ->icon('heroicon-o-adjustments-horizontal')
+                ->color(
+                    fn() =>
+                    $this->record->has_variations ? 'primary' : 'success'
+                )
+                ->requiresConfirmation()
+                ->action(function () {
+                    $product = $this->record;
+
+                    if ($product->has_variations) {
+                        // Turning OFF variations
+                        $product->update(['has_variations' => false]);
+
+                        // Optional cleanup (recommended)
+                        $product->skus()->delete();
+                        $product->productAttributes()->delete();
+
+                        Notification::make()
+                            ->title('Variations disabled')
+                            ->body('Product is now a simple product.')
+                            ->success()
+                            ->send();
+                    } else {
+                        // Turning ON variations
+                        $product->update(['has_variations' => true]);
+
+                        Notification::make()
+                            ->title('Variations enabled')
+                            ->body('You can now add attributes and SKUs.')
+                            ->success()
+                            ->send();
+                    }
+
+                    $this->refreshFormData(['has_variations']);
+                }),
+
         ];
     }
 }
