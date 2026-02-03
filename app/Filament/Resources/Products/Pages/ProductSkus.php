@@ -34,6 +34,7 @@ class ProductSkus extends EditRecord
                 ->label(false)
                 ->collapsible()
                 ->addable(false)
+                ->deletable(false)
                 ->defaultItems(1)
                 ->schema([
                     TextEntry::make('attributeValues.value')

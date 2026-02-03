@@ -97,7 +97,7 @@ class ProductAttributes extends EditRecord
 
             Notification::make()
                 ->title('SKUs updated automatically')
-                ->body('New SKU combinations have been generated.')
+                ->body('SKU combinations have been Modified.')
                 ->success()
                 ->send();
         } catch (ValidationException $e) {
