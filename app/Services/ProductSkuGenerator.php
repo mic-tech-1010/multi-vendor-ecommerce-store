@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Product;
 use App\Models\ProductSku;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -59,7 +58,7 @@ class ProductSkuGenerator
 
         DB::transaction(function () use ($product, $desiredCombinations) {
 
-            // 3A — DELETE INVALID SKUs (NEW)
+            // 3A — DELETE INVALID SKUs
             $attributeCount = $product->productAttributes->count();
 
             $product->skus()
@@ -72,7 +71,7 @@ class ProductSkuGenerator
                     }
                 });
 
-            // 3B — CREATE MISSING SKUs (REFINED)
+            // 3B — CREATE MISSING SKUs
             $existingCombinations = $product->skus()
                 ->with('attributeValues:id')
                 ->get()
@@ -102,22 +101,6 @@ class ProductSkuGenerator
     /**
      * Generate cartesian product
      */
-    // private function cartesianProduct(array $sets): array
-    // {
-    //     $result = [[]];
-
-    //     foreach ($sets as $set) {
-    //         $result = collect($result)
-    //             ->flatMap(
-    //                 fn($product) =>
-    //                 collect($set)->map(fn($value) => array_merge($product, [$value]))
-    //             )
-    //             ->all();
-    //     }
-
-    //     return $result;
-    // }
-
     private function cartesianProduct(array $sets): array
     {
         if (count($sets) === 0) {
@@ -130,7 +113,6 @@ class ProductSkuGenerator
             ->crossJoin(...$sets)
             ->all();
     }
-
 
     /**
      * SKU code generator
