@@ -31,14 +31,6 @@ class ProductSectionForm
                 Select::make('type')
                     ->required()
                     ->options(ProductSectionTypeEnum::labels()),
-                // Select::make('products')
-                //     ->multiple()
-                //     ->relationship(
-                //         name: 'products',
-                //         titleAttribute: 'title'
-                //     )
-                //     ->preload()
-                //     ->searchable(),
                 Checkbox::make('active'),
                 TextInput::make('sort_order')
                     ->numeric()
