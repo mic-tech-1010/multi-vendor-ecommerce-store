@@ -30,11 +30,19 @@ class ProductResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'title';
 
-
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->forVendor();
+        $user = Filament::auth()->user();
+
+        $query = parent::getEloquentQuery();
+
+        if ($user->hasRole(RolesEnum::Vendor)) {
+            $query->forVendor();
+        }
+
+        return $query;
     }
+
 
     public static function form(Schema $schema): Schema
     {

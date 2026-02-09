@@ -6,6 +6,7 @@ use App\Enum\ProductStatusEnum;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
@@ -72,5 +73,12 @@ class Product extends Model implements HasMedia
     public function skus(): HasMany
     {
         return $this->hasMany(ProductSku::class);
+    }
+
+    public function sections(): BelongsToMany
+    {
+        return $this->belongsToMany(ProductSection::class, 'product_section_product')
+            ->withPivot('position')
+            ->orderBy('product_section_product.position');
     }
 }
