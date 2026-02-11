@@ -1,6 +1,7 @@
 import { Head } from '@inertiajs/react';
 
 import PageLayout from '@/layouts/app-layout';
+import ImageCarousel from '@/section/home/Carousel';
 
 export default function Home() {
 
@@ -10,7 +11,7 @@ export default function Home() {
                 <meta name="description" content="Welcome to our multi-vendor store!" />
             </Head>
 
-            <h1>This is the home page</h1>
+            <ImageCarousel />
 
         </>
     );
