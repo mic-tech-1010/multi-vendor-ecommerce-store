@@ -22,6 +22,37 @@ export interface NavItem {
     isActive?: boolean;
 }
 
+export interface Image {
+    id: number;
+    thumb: string;
+    small: string;
+    large: string;
+}
+
+export type PaginationProps<T> = {
+    data: Array<T>
+}
+
+export interface Product {
+    id: number;
+    name: string;
+    slug: string;
+    price: number;
+    image: string;
+    images: Image[];
+    [key: string]: unknown; // This allows for additional properties...
+}
+
+export interface Section {
+    id: number;
+    title: string;
+    slug: string;
+    layout: string;
+    type: string;
+    sort_order: number;
+    products: Product[];
+}
+
 export interface SharedData {
     name: string;
     auth: Auth;

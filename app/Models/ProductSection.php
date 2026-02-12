@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Builder;
 
 class ProductSection extends Model
 {
@@ -15,6 +16,13 @@ class ProductSection extends Model
         'active',
         'sort_order',
     ];
+
+
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->where('active', true);
+
+    }
 
     public function products(): BelongsToMany
     {

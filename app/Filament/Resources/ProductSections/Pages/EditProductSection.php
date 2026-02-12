@@ -5,6 +5,7 @@ namespace App\Filament\Resources\ProductSections\Pages;
 use App\Filament\Resources\ProductSections\ProductSectionResource;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Support\Str;
 
 class EditProductSection extends EditRecord
 {
@@ -15,5 +16,13 @@ class EditProductSection extends EditRecord
         return [
             DeleteAction::make(),
         ];
+    }
+
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+
+        $data['layout'] = Str::slug($data['layout']);
+
+        return $data;
     }
 }

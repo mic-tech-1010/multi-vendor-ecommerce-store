@@ -1,16 +1,12 @@
 <?php
 
 use App\Enum\RolesEnum;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
-use Laravel\Fortify\Features;
 
-Route::get('/', function () {
-    return Inertia::render('home', [
-        'canRegister' => Features::enabled(Features::registration()),
-    ]);
-})->name('home');
+
+Route::get('/', [ProductController::class, 'index'])->name('home');
 
 
 Route::middleware(['auth', 'verified'])->group(function () {

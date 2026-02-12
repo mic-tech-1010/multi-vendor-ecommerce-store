@@ -45,10 +45,10 @@ function ImageCarousel() {
                     </CarouselItem>
                 ))}
             </CarouselContent>
-            <CarouselPrevious className="left-0 top-[20%] hover:bg-transparent cursor-pointer" variant="ghost">
+            <CarouselPrevious className="left-0 top-[20%] hover:bg-transparent cursor-pointer size-18" variant="ghost">
                <CustomChevronLeft />
             </CarouselPrevious>
-            <CarouselNext className="right-0 top-[20%] hover:bg-transparent cursor-pointer" variant="ghost">
+            <CarouselNext className="right-0 top-[20%] hover:bg-transparent cursor-pointer size-18" variant="ghost">
                <CustomChevronRight />
             </CarouselNext>
         </Carousel>
