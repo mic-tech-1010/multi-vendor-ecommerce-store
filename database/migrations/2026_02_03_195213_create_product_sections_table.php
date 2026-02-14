@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('layout');
             $table->string('type');
             $table->boolean('active')->default(true);
-            $table->unsignedInteger('sort_order')->default(0);
+            $table->unsignedInteger('sort_order')->default(0)->unique();
             $table->timestamps();
         });
 
@@ -40,7 +40,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_sections');
         Schema::dropIfExists('product_section_product');
+        Schema::dropIfExists('product_sections');
     }
 };

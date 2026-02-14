@@ -86,7 +86,6 @@ class ProductImages extends EditRecord
                     $this->refreshFormData(['has_variations']);
                 }),
 
-
         ];
     }
 }

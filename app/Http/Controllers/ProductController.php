@@ -13,12 +13,13 @@ class ProductController extends Controller
     {
         $sections = ProductSection::query()
             ->active()
+            ->orderBy('sort_order')
             ->with([
                 'products' => function ($query) {
                     $query
                         ->forWebsite()
                         ->orderBy('product_section_product.position')
-                        ->paginate(12);
+                        ->take(12);
                 }
             ])
             ->get();

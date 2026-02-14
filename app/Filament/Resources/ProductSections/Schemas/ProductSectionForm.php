@@ -34,7 +34,11 @@ class ProductSectionForm
                 Checkbox::make('active'),
                 TextInput::make('sort_order')
                     ->numeric()
-                    ->default(0),
+                    ->default(fn () => \App\Models\ProductSection::max('sort_order') + 1)
+                    ->unique(column: 'sort_order')
+                    ->validationMessages([
+                        'unique' => 'This sort order is already used.',
+                    ]),
             ]);
     }
 }

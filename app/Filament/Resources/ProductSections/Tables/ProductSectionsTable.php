@@ -19,6 +19,7 @@ class ProductSectionsTable
                 TextColumn::make('layout')->searchable()->sortable(),
                 TextColumn::make('type')->searchable()->sortable(),
             ])
+            ->reorderable('sort_order')
             ->filters([
                 //
             ])

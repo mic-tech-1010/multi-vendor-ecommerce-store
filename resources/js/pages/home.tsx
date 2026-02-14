@@ -15,7 +15,9 @@ export default function Home({ sections }: { sections: PaginationProps<Section> 
 
             <ImageCarousel />
 
-            <section className="mt-8 sm:mt-[-23%] z-20 relative px-0 sm:px-4 overflow-hidden">
+            <section
+            className="mt-8 sm:mt-[-23%] z-20 relative px-0 sm:px-4 overflow-hidden"
+            >
                 {sections.data.map(section => (
                     <ProductSectionRenderer
                         key={section.id}

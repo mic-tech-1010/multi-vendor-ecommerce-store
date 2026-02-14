@@ -8,7 +8,7 @@ export default function ProductGridSection({ section }: { section: Section }) {
 
     return (
 
-        <div className={gridClasses}>
+        <div className="mb-8">
             <ProductCard section={section} >
                <ProductCardGrid className={gridClasses} products={section.products} />
             </ProductCard>
@@ -19,12 +19,12 @@ export default function ProductGridSection({ section }: { section: Section }) {
 
 function ProductCardGrid({ products, className = "" }: { products: Product[], className: string }) {
     return (
-        <ul className={className}>
+        <ul className={`auto-rows-fr gap-6 ${className}`}>
            { products ? products.map(product => (
-            <li key={product.id}>
-                <Link href="">
-                    <img src={product.image} alt={product.slug}/>
-                    <p className="text-[0.9rem]">{product.name}</p>
+            <li key={product.id} className="">
+                <Link href="" className="grid">
+                    <img src={product.image} alt={product.slug} className="aspect-square h-full max-h-full"/>
+                    <p className="text-sm truncate">{product.name}</p>
                 </Link>
             </li>
             )) : null}

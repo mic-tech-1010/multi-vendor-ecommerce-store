@@ -18,11 +18,4 @@ class EditProductSection extends EditRecord
         ];
     }
 
-    protected function mutateFormDataBeforeSave(array $data): array
-    {
-
-        $data['layout'] = Str::slug($data['layout']);
-
-        return $data;
-    }
 }
