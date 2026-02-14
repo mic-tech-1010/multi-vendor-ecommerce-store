@@ -5,7 +5,7 @@ function PageLayout({ children }: { children: React.ReactNode }) {
     return (
         <>
             <Header />
-            <main className="">
+            <main className="bg-[#e3e6e6]">
                 {children}
             </main>
             <Footer />
