@@ -7,6 +7,7 @@ import {
     CarouselPrevious,
 } from "@/components/ui/carousel"
 import { Link } from "@inertiajs/react";
+import ProductController from "@/actions/App/Http/Controllers/ProductController";
 
 
 function ProductSlider({ section }: { section: Section }) {
@@ -25,7 +26,7 @@ function ProductSlider({ section }: { section: Section }) {
                         {section.products.map((product) => (
                             <CarouselItem key={product.id} className="basis-1/3 md:basis-1/4 lg:basis-1/6 aspect-square max-h-35 sm:max-h-48 h-full">
                                 <li className="p-1 aspect-square h-full">
-                                    <Link href={''} className="flex h-full">
+                                    <Link href={ProductController.show(product.id)} className="flex h-full">
                                         <img src={product.image} alt={product.slug} className="object-contain max-h-full w-full"/>
                                     </Link>
                                 </li>

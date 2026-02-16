@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('layout');
             $table->string('type');
             $table->boolean('active')->default(true);
-            $table->unsignedInteger('sort_order')->default(0)->unique();
+            $table->unsignedInteger('sort_order')->default(0);
             $table->timestamps();
         });
 

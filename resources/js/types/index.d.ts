@@ -29,18 +29,50 @@ export interface Image {
     large: string;
 }
 
+export type ProductAttributeValue = {
+    id: number;
+    value: string;
+    images: Image[];
+    type: ProductAttribute;
+}
+
+export type ProductAttribute = {
+    id: number;
+    name: string;
+    type: 'Select' | 'Radio' | 'Image';
+    options: ProductAttributeValue[]
+}
+
 export type PaginationProps<T> = {
     data: Array<T>
 }
 
 export interface Product {
-    id: number;
-    name: string;
-    slug: string;
-    price: number;
-    image: string;
-    images: Image[];
-    [key: string]: unknown; // This allows for additional properties...
+    data: {
+        id: number;
+        title: string;
+        slug: string;
+        price: number;
+        quantity: number;
+        image: string;
+        images: Image[];
+        description: string;
+        user: {
+            id: number;
+            name: string;
+        };
+        department: {
+            id: number;
+            name: string;
+        };
+        ProductAttributes: ProductAttribute[],
+        skus: Array<{
+            id: number;
+            sku: number;
+            quantity: number;
+            price: number;
+        }>
+    };
 }
 
 export interface Section {
