@@ -20,7 +20,7 @@ function ProductCardGrid({ layout, products, className = "" }: { products: Produ
         <ul className={`flex-1 ${className}`}>
             {products ? products.map(product => (
                 <li key={product.id} className="">
-                    <Link href={ProductController.show(product.id)} className="block h-full">
+                    <Link href={ProductController.show(product.slug)} className="block h-full">
                         <img src={product.image} alt={product.slug} className="aspect-square h-full max-h-full w-full" />
                         {layout === 'single-grid' ? null : (<p className="text-sm truncate">{product.name}</p>)}
                     </Link>

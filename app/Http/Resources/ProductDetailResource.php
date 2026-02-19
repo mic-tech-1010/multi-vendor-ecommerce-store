@@ -38,6 +38,10 @@ class ProductDetailResource extends JsonResource
                 'id' => $this->department->id,
                 'name' => $this->department->name,
             ],
+            'category' => [
+                'id' => $this->category->id,
+                'name' => $this->category->name,
+            ],
             'productAttributes' => $this->productAttributes->map(function ($attribute) {
                 return [
                     'id' => $attribute->id,
@@ -70,3 +74,4 @@ class ProductDetailResource extends JsonResource
         ];
     }
 }
+

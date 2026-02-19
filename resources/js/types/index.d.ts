@@ -50,7 +50,7 @@ export type PaginationProps<T> = {
 export interface Product {
     data: {
         id: number;
-        title: string;
+        name: string;
         slug: string;
         price: number;
         quantity: number;
@@ -65,7 +65,11 @@ export interface Product {
             id: number;
             name: string;
         };
-        ProductAttributes: ProductAttribute[],
+        category: {
+          id: number;
+            name: string;
+        };
+        productAttributes: ProductAttribute[],
         skus: Array<{
             id: number;
             sku: number;
