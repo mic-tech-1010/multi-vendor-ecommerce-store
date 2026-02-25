@@ -59,6 +59,14 @@ class ProductDetailResource extends JsonResource
                                     'large' => $media->getUrl('large'),
                                 ];
                             }),
+                            'skus' => $option->skus->map(function ($sku) {
+                                return [
+                                    'id' => $sku->id,
+                                    'sku' => $sku->sku,
+                                    'price' => $sku->price,
+                                    'quantity' => $sku->quantity,
+                                ];
+                            }),
                         ];
                     }),
                 ];
@@ -69,9 +77,11 @@ class ProductDetailResource extends JsonResource
                     'sku' => $sku->sku,
                     'price' => $sku->price,
                     'quantity' => $sku->quantity,
+                    'attribute_value_ids' => $sku->attributeValues
+                        ->pluck('id')
+                        ->values(),
                 ];
             }),
         ];
     }
 }
-

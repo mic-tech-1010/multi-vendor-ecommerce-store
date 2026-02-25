@@ -29,11 +29,20 @@ export interface Image {
     large: string;
 }
 
+export type Sku = {
+    id: number;
+    sku: number;
+    quantity: number;
+    price: number;
+    attribute_value_ids: number[] | null;
+}
+
 export type ProductAttributeValue = {
     id: number;
     value: string;
     images: Image[];
     type: ProductAttribute;
+    skus: Sku[];
 }
 
 export type ProductAttribute = {
@@ -66,16 +75,11 @@ export interface Product {
             name: string;
         };
         category: {
-          id: number;
+            id: number;
             name: string;
         };
         productAttributes: ProductAttribute[],
-        skus: Array<{
-            id: number;
-            sku: number;
-            quantity: number;
-            price: number;
-        }>
+        skus: Sku[];
     };
 }
 
