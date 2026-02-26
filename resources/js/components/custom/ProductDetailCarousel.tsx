@@ -55,7 +55,7 @@ const Carousel: React.FC<CarouselPropType> = ({ images, thumbNails }) => {
     }, [emblaMainApi, onSelect])
 
     return (
-        <div className="flex max-w-4xl h-112.5 gap-1">
+        <div className="flex max-w-4xl h-112.5 gap-0.25">
             {/* Thumbnails */}
             <div className="w-20 overflow-hidden" ref={emblaThumbsRef}>
                 <div className="flex flex-col gap-3 h-full">
@@ -103,7 +103,7 @@ const Thumb: React.FC<ThumbPropType> = ({
             onMouseEnter={onHover}
             onClick={onClick}
             className={`
-        cursor-pointer w-15 h-15 overflow-hidden rounded-xl border transition
+        cursor-pointer w-12 h-12 overflow-hidden rounded-xl border transition
         ${selected ? "border-black" : "border-gray-300 opacity-60"}
       `}
         >
