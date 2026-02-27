@@ -1,7 +1,7 @@
 import { Head } from '@inertiajs/react';
 import PageLayout from '@/layouts/app-layout';
 import ImageCarousel from '@/section/home/Carousel';
-import { PaginationProps, Section } from '@/types';
+import { Section } from '@/types';
 import ProductSectionRenderer from '@/components/custom/ProductSectionRenderer';
 
 function isGrid(layout: string) {
@@ -37,12 +37,12 @@ function GridGroup({ sections }: { sections: Section[] }) {
 export default function Home({
     sections,
 }: {
-    sections: PaginationProps<Section>;
+    sections: Section[];
 }) {
     const renderedSections: React.ReactNode[] = [];
     let gridGroup: Section[] = [];
 
-    sections.data.forEach((section, index) => {
+    sections.forEach((section, index) => {
         if (isGrid(section.layout)) {
             gridGroup.push(section);
         } else {

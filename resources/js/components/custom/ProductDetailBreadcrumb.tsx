@@ -15,18 +15,18 @@ export function ProductDetailBreadcrumb({product}: {product: Product}) {
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link href="">{product.data.department?.name}</Link>
+            <Link href="">{product.department?.name}</Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link href="">{product.data.category?.name}</Link>
+            <Link href="">{product.category?.name}</Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbPage>{product.data.name}</BreadcrumbPage>
+          <BreadcrumbPage>{product.name}</BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>

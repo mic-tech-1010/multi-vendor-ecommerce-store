@@ -54,6 +54,18 @@ const Carousel: React.FC<CarouselPropType> = ({ images, thumbNails }) => {
         emblaMainApi.on("reInit", onSelect)
     }, [emblaMainApi, onSelect])
 
+
+    useEffect(() => {
+        if (!emblaMainApi) return
+
+        emblaMainApi.reInit()
+        emblaMainApi.scrollTo(0)
+        setSelectedIndex(0)
+
+        emblaThumbsApi?.reInit()
+        emblaThumbsApi?.scrollTo(0)
+    }, [images, thumbNails])
+
     return (
         <div className="flex max-w-4xl h-112.5 gap-0.25">
             {/* Thumbnails */}

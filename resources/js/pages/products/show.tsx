@@ -39,7 +39,7 @@ function Show({ product }: { product: Product }) {
     // AUTO-SELECT FIRST OPTIONS
     // ======================================================
     useEffect(() => {
-        if (!product?.data?.productAttributes?.length) return;
+        if (!product?.productAttributes?.length) return;
 
         setSelectedOptions((prev) => {
             // don't override if already selected
@@ -47,13 +47,12 @@ function Show({ product }: { product: Product }) {
 
             const defaults: Record<number, ProductAttributeValue> = {};
 
-            product.data.productAttributes.forEach((attr) => {
+            product.productAttributes.forEach((attr) => {
                 if (attr.options?.length) {
                     defaults[attr.id] = attr.options[0];
                 }
             });
 
-            console.log(defaults)
             return defaults;
         });
     }, [product]);
@@ -96,20 +95,14 @@ function Show({ product }: { product: Product }) {
         });
     };
 
-    // ======================================================
-    const previewOption = (option: ProductAttributeValue) => {
-        if (option.images?.length) {
-            setPreviewImages(option.images);
-        }
-    };
-
+    console.log(selectedOptions)
     // ======================================================
     const selectedSku = useMemo(() => {
         const selectedIds = Object.values(selectedOptions)
             .map((op) => op.id)
             .sort();
 
-        for (const sku of product.data.skus) {
+        for (const sku of product.skus) {
             const skuOptionIds = sku.attribute_value_ids?.slice().sort();
 
             if (
@@ -123,6 +116,13 @@ function Show({ product }: { product: Product }) {
 
         return null;
     }, [selectedOptions, product]);
+
+     // ======================================================
+    const previewOption = (option: ProductAttributeValue) => {
+        if (option.images?.length) {
+            setPreviewImages(option.images);
+        }
+    };
 
     // ======================================================
     const activeOptionImages = useMemo(() => {
@@ -141,14 +141,14 @@ function Show({ product }: { product: Product }) {
 
         if (activeOptionImages) return activeOptionImages;
 
-        return product.data.images;
+        return product.images;
 
     }, [product, previewImages, activeOptionImages]);
 
     // thumbnails must match main images source
     const thumbNails = useMemo(() => {
-        if (activeOptionImages) return activeOptionImages;
-        return product.data.images;
+        if(activeOptionImages) return activeOptionImages;
+        return product.images;
     }, [product, activeOptionImages]);
 
     // ======================================================
@@ -158,7 +158,7 @@ function Show({ product }: { product: Product }) {
 
     // ======================================================
     const renderProductVariationTypes = () => {
-        return product.data.productAttributes.map((attribute) => (
+        return product.productAttributes.map((attribute) => (
             <div key={attribute.id}>
                 <b>{attribute.name}</b>
 
@@ -249,31 +249,32 @@ function Show({ product }: { product: Product }) {
 
                 <div className="col-span-4">
                     <h1 className="text-3xl font-semibold mb-2">
-                        {product.data.name}
+                        {product.name}
                     </h1>
 
-                    {renderProductVariationTypes()}
+                    {product.productAttributes.length ? renderProductVariationTypes() : null}
 
                     <b className="text-xl">About the Item</b>
                     <div
-                        className="ck-content-output"
+                        className=""
                         dangerouslySetInnerHTML={{
-                            __html: product.data.description,
+                            __html: product.description,
                         }}
                     />
 
                     <div className="mt-4 p-3 bg-gray-100 text-xs">
                         <pre>{JSON.stringify(selectedSku, null, 2)}</pre>
                     </div>
+
                 </div>
 
                 <div className="col-span-2">
                     <Card className="w-full max-w-sm">
                         <CardHeader>
-                            <CardTitle>Login to your account</CardTitle>
+                            <CardTitle className="sr-only">Product price Detail</CardTitle>
                         </CardHeader>
                         <CardContent>
-
+                           <p>${selectedSku ? selectedSku.price : product.price}</p>
                         </CardContent>
                         <CardFooter className="flex-col gap-2">
 
