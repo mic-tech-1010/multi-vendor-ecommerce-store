@@ -81,4 +81,30 @@ class Product extends Model implements HasMedia
             ->withPivot('position')
             ->orderBy('product_section_product.position');
     }
+
+    public function getPriceForOptions($skuId = null)
+    {
+       $productSku = $this->skus()->where('id', $skuId)->first();
+
+        if ($productSku && $productSku->price !== null) {
+            return $productSku->price;
+        }
+
+        return $this->price;
+    }
+
+    public function getImageForOptions($skuId = null)
+    {
+
+        $AttributeValue = ProductAttributeValue::whereHas('skus', function ($query) use ($skuId) {
+            $query->where('id', $skuId);
+        })->with('media')->first();
+
+        if ($AttributeValue && $AttributeValue->getFirstMediaUrl('images', 'small')) {
+            return $AttributeValue->getFirstMediaUrl('images', 'small');
+        }
+
+        return $this->getFirstMediaUrl('images', 'small');
+
+    }
 }

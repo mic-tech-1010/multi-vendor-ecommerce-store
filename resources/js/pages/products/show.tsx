@@ -7,13 +7,16 @@ import { Product, ProductAttributeValue, Image } from "@/types";
 import { useMemo, useState, useEffect } from "react";
 import { router, useForm, usePage } from "@inertiajs/react";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
 } from "@/components/ui/card"
+import CurrencyFormatter from "@/components/app/currency-formatter";
+import { Select } from "@/components/ui/select";
+import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
+import { ChevronDownIcon } from "lucide-react";
+import CartController from "@/actions/App/Http/Controllers/CartController";
 
 function Show({ product }: { product: Product }) {
 
@@ -28,11 +31,9 @@ function Show({ product }: { product: Product }) {
     const form = useForm<{
         sku_id: number | null;
         quantity: number;
-        price: number | null;
     }>({
         sku_id: null,
         quantity: 1,
-        price: null,
     });
 
     // ======================================================
@@ -95,7 +96,6 @@ function Show({ product }: { product: Product }) {
         });
     };
 
-    console.log(selectedOptions)
     // ======================================================
     const selectedSku = useMemo(() => {
         const selectedIds = Object.values(selectedOptions)
@@ -117,7 +117,7 @@ function Show({ product }: { product: Product }) {
         return null;
     }, [selectedOptions, product]);
 
-     // ======================================================
+    // ======================================================
     const previewOption = (option: ProductAttributeValue) => {
         if (option.images?.length) {
             setPreviewImages(option.images);
@@ -147,9 +147,17 @@ function Show({ product }: { product: Product }) {
 
     // thumbnails must match main images source
     const thumbNails = useMemo(() => {
-        if(activeOptionImages) return activeOptionImages;
+        if (activeOptionImages) return activeOptionImages;
         return product.images;
     }, [product, activeOptionImages]);
+
+    const currency = useMemo(() => {
+        if (selectedSku) {
+            return CurrencyFormatter(selectedSku.price);
+        }
+        return CurrencyFormatter(product.price);
+    }, [selectedSku, product]);
+
 
     // ======================================================
     useEffect(() => {
@@ -164,7 +172,7 @@ function Show({ product }: { product: Product }) {
 
                 {/* ================= IMAGE TYPE ================= */}
                 {attribute.type === "Image" && (
-                    <div className="flex gap-2 mb-4">
+                    <div className="flex flex-wrap gap-2 mb-4">
                         {attribute.options.map((option) => {
                             const isActive =
                                 selectedOptions[attribute.id]?.id === option.id;
@@ -237,6 +245,41 @@ function Show({ product }: { product: Product }) {
         ));
     };
 
+    const onQuantityChange = (ev: React.ChangeEvent<HTMLSelectElement>) => {
+        form.setData('quantity', parseInt(ev.target.value))
+    }
+
+    const addToCart = () => {
+        form.post(CartController.store(product.id).url, {
+            preserveScroll: true,
+            preserveState: true,
+            onError: (err) => {
+                console.log(err)
+            }
+        })
+    }
+
+    const computedProductQuantity = selectedSku ? selectedSku?.quantity : product.quantity;
+
+    // ======================================================
+    const renderAddToCartButton = () => {
+        return (<div className="space-y-4 w-full">
+            <NativeSelect value={form.data.quantity}
+                onChange={onQuantityChange}
+                className="w-full border rounded-md border-black">
+                {Array.from({
+                    length: Math.min(10, computedProductQuantity),
+                }).map((el, i) => (
+                    <NativeSelectOption value={i + 1} key={i}>Quantity: {i + 1} </NativeSelectOption>
+                ))}
+            </NativeSelect>
+            <Button onClick={addToCart} className="w-full bg-[#ffd814] hover:bg-[#ffd814] text-black rounded-full">Add to Cart</Button>
+            <Button onClick={() => console.log("Buy Now clicked")} className="w-full bg-[#ffa41c] hover:bg-[#ffa41c] text-black rounded-full">Buy Now</Button>
+        </div>
+
+        )
+    }
+
     // ======================================================
     return (
         <main className="container mx-auto px-0 py-6">
@@ -256,29 +299,45 @@ function Show({ product }: { product: Product }) {
 
                     <b className="text-xl">About the Item</b>
                     <div
-                        className=""
+                        className="ck-content-output"
                         dangerouslySetInnerHTML={{
                             __html: product.description,
                         }}
                     />
 
-                    <div className="mt-4 p-3 bg-gray-100 text-xs">
-                        <pre>{JSON.stringify(selectedSku, null, 2)}</pre>
-                    </div>
-
                 </div>
 
                 <div className="col-span-2">
-                    <Card className="w-full max-w-sm">
+                    <Card className="w-full max-w-sm pt-0 pb-4">
                         <CardHeader>
                             <CardTitle className="sr-only">Product price Detail</CardTitle>
                         </CardHeader>
-                        <CardContent>
-                           <p>${selectedSku ? selectedSku.price : product.price}</p>
-                        </CardContent>
-                        <CardFooter className="flex-col gap-2">
+                        <CardContent className="space-y-2 px-4">
+                            <p className="flex gap-0.5 items-start">
+                                <span className="text-xs mt-1">{currency.currencySymbol}</span>
+                                <b className="text-xl"> {currency.numericalValue}</b>
+                            </p>
 
-                        </CardFooter>
+                              <p className="text-sm text-gray-400">
+                                {currency.currencySymbol} {currency.numericalValue} Shipping & Import Fees
+                            </p>
+
+                            <p className="text-sm text-gray-400">
+                                Deposit To Nigeria
+                                <span className="text-blue-400 pl-1 flex items-start gap-px">
+                                    <span>Details</span>
+                                    <ChevronDownIcon />
+                                </span>
+                            </p>
+
+                            <p className="text-green-500 text-base">
+                                {computedProductQuantity === 0 ?
+                                    'Out of Stock' : 'In Stock'
+                                }
+                            </p>
+
+                            {renderAddToCartButton()}
+                        </CardContent>
                     </Card>
                 </div>
             </div>
