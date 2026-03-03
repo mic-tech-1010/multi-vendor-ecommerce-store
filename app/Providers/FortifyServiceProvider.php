@@ -15,6 +15,7 @@ use Inertia\Inertia;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Fortify;
 use Laravel\Fortify\Contracts\LoginResponse;
+use App\Services\CartService;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -37,6 +38,9 @@ class FortifyServiceProvider extends ServiceProvider
                 else {
                      $route = route('home', absolute: false);
                 }
+
+                 $cartService = app(CartService::class);
+                 $cartService->moveCartItemsToDatabaseFromCookies($user->id);
 
                 return redirect()->intended($route);
             }

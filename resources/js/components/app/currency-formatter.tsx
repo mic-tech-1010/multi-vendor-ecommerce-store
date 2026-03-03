@@ -9,6 +9,8 @@ function CurrencyFormatter(
         currency: 'USD',
     });
 
+    const format = formatter.format(amount);
+
     const parts = formatter.formatToParts(amount);
 
     let currencySymbol = '';
@@ -22,7 +24,7 @@ function CurrencyFormatter(
         }
     }
 
-    return { currencySymbol: currencySymbol, numericalValue: numericalValue };
+    return { currencySymbol: currencySymbol, numericalValue: numericalValue, formatted: format };
 }
 
 export default CurrencyFormatter;

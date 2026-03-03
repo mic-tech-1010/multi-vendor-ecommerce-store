@@ -57,28 +57,28 @@ export type PaginationProps<T> = {
 }
 
 export interface Product {
+    id: number;
+    name: string;
+    slug: string;
+    price: number;
+    quantity: number;
+    image: string;
+    images: Image[];
+    description: string;
+    user: {
         id: number;
         name: string;
-        slug: string;
-        price: number;
-        quantity: number;
-        image: string;
-        images: Image[];
-        description: string;
-        user: {
-            id: number;
-            name: string;
-        };
-        department: {
-            id: number;
-            name: string;
-        };
-        category: {
-            id: number;
-            name: string;
-        };
-        productAttributes: ProductAttribute[],
-        skus: Sku[];
+    };
+    department: {
+        id: number;
+        name: string;
+    };
+    category: {
+        id: number;
+        name: string;
+    };
+    productAttributes: ProductAttribute[],
+    skus: Sku[];
 }
 
 export interface Section {
@@ -91,10 +91,40 @@ export interface Section {
     products: Product[];
 }
 
-export interface SharedData {
+export type CartItem = {
+    id: number;
+    product_id: number;
+    title: string;
+    slug: string;
+    price: number;
+    quantity: number;
+    image: string;
+    product_sku_id: number | null;
+    options: ProductAttributeValue[];
+}
+
+export type GroupedCartItem = {
+    user: User;
+    items: CartItem[];
+    totalPrice: number;
+    totalQuantity: number;
+}
+
+export type SharedData<
+    T extends Record<string, unknown> = Record<string, unknown>,
+> = T & {
     name: string;
     auth: Auth;
     sidebarOpen: boolean;
+    csrf_token: string;
+    error: string;
+    success: {
+        message: string;
+        time: number;
+    };
+    totalQuantity: number;
+    totalPrice: number;
+    miniCartItems: CartItem[];
     [key: string]: unknown;
 }
 

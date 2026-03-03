@@ -6,6 +6,8 @@ import LocationTab from '@/components/custom/LocationTab';
 import AccountTab from '@/components/custom/AccountTab';
 import HamburgerMenu from '@/components/custom/HamburgerMenu';
 import { ChevronRight, ShoppingCart, User } from 'lucide-react'
+import { Link } from '@inertiajs/react';
+import CartController from '@/actions/App/Http/Controllers/CartController';
 
 const menuItems = [
     { label: "Today's Deals", href: "#" },
@@ -82,13 +84,13 @@ function Header() {
 
                         {/** start cart */}
 
-                        <a href="" className="flex items-end gap-1 text-left leading-[1.1] text-nav-color hover:outline-solid! hover:outline-offset-3! hover:outline-white! hover:outline-1 pr-0 tablet:pr-3">
+                        <Link href={CartController.index().url} className="flex items-end gap-1 text-left leading-[1.1] text-nav-color hover:outline-solid! hover:outline-offset-3! hover:outline-white! hover:outline-1 pr-0 tablet:pr-3">
                             <div className="relative">
                                 <ShoppingCart size={isTablet ? '28' : '24'} />
                                 <span className="absolute -top-[40%] left-1/2 text-[14px]">0</span>
                             </div>
                              <span className='w-3.75 text-bold hidden xl:inline'>Cart</span>
-                        </a>
+                        </Link>
 
                         {/** end cart */}
 

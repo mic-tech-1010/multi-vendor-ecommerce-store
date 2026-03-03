@@ -13,7 +13,6 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import CurrencyFormatter from "@/components/app/currency-formatter";
-import { Select } from "@/components/ui/select";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 import { ChevronDownIcon } from "lucide-react";
 import CartController from "@/actions/App/Http/Controllers/CartController";
