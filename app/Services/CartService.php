@@ -230,7 +230,7 @@ class CartService
                 $productIds = collect($cartItems)->map(fn($item) => $item['product_id']);
 
                 $products = Product::whereIn('id', $productIds)
-                    //->with('user.vendor')
+                    ->with('user.vendor')
                     ->forWebsite()
                     ->get()
                     ->keyBy('id');
@@ -278,7 +278,7 @@ class CartService
                         'image' => $imageUrl ?: $product->getFirstMediaUrl('images', 'small'),
                         'user' => [
                             'id' => $product->created_by,
-                            // 'name' => $product->user->vendor->store_name,
+                            'name' => $product->user->vendor->store_name,
                         ],
                     ];
                 }

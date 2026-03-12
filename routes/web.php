@@ -1,10 +1,9 @@
 <?php
 
-use App\Enum\RolesEnum;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CheckOutController;
 
 
 Route::get('/', [ProductController::class, 'index'])->name('home');
@@ -20,8 +19,14 @@ Route::controller(CartController::class)->group(function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
-   Route::post('/cart/checkout', [CartController::class, 'checkout'])
+    Route::post('/cart/checkout', [CheckOutController::class, 'checkout'])
         ->name('cart.checkout');
+
+    Route::get('stripe/success', [CheckOutController::class, 'success'])
+        ->name('stripe.success');
+
+    Route::get('stripe/failure', [CheckOutController::class, 'failure'])
+        ->name('stripe.failure');
 });
 
 require __DIR__ . '/settings.php';

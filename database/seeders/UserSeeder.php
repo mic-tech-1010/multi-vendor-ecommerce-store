@@ -6,6 +6,8 @@ use App\Enum\RolesEnum;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
+use App\Models\Vendor;
+use App\Enum\VendorStatusEnum;
 
 class UserSeeder extends Seeder
 {

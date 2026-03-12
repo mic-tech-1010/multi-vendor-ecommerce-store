@@ -71,5 +71,4 @@ class CartController extends Controller
         return back()->with('success', 'product was removed from cart.');
     }
 
-    public function checkOut() {}
 }

@@ -9,9 +9,9 @@ import { Link } from "@inertiajs/react"
 import { Button } from "@/components/ui/button"
 import { CreditCardIcon } from "lucide-react"
 import CurrencyFormatter from "@/components/app/currency-formatter"
-import CartController from "@/actions/App/Http/Controllers/CartController"
 import CartItem from "@/components/custom/CartItem"
 import PageLayout from "@/layouts/app-layout";
+import CheckOutController from "@/actions/App/Http/Controllers/CheckOutController"
 
 function Index({
     csrf_token,
@@ -39,7 +39,7 @@ function Index({
                                     {cartItem.user.name}
                                 </Link>
                                 <div>
-                                    <form action={CartController.checkout().url} method="post">
+                                    <form action={CheckOutController.checkout().url} method="post">
                                         <input type="hidden" name="_token" value={csrf_token} />
                                         <input type="hidden" name="vendor_id" value={cartItem.user.id} />
                                         <Button variant={"ghost"}>
@@ -61,7 +61,7 @@ function Index({
                 <CardContent>
                     Subtotal ({totalQuantity} items): &nbsp;
                     {CurrencyFormatter(totalPrice).formatted}
-                    <form action={CartController.checkout().url} method="post">
+                    <form action={CheckOutController.checkout().url} method="post">
                         <input type="hidden" name="_token" value={csrf_token} />
                         <Button variant={"default"}>
                             <CreditCardIcon />
