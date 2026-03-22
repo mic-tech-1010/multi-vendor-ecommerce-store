@@ -1,17 +1,17 @@
-import { GroupedCartItem, SharedData } from "@/types"
+import { GroupedCartItem, SharedData } from "@/types";
 import {
     Card,
     CardContent,
     CardHeader,
     CardTitle,
-} from "@/components/ui/card"
-import { Link } from "@inertiajs/react"
-import { Button } from "@/components/ui/button"
-import { CreditCardIcon } from "lucide-react"
-import CurrencyFormatter from "@/components/app/currency-formatter"
-import CartItem from "@/components/custom/CartItem"
+} from "@/components/ui/card";
+import { Link } from "@inertiajs/react";
+import { Button } from "@/components/ui/button";
+import { CreditCardIcon } from "lucide-react";
+import CurrencyFormatter from "@/components/app/currency-formatter";
+import CartItem from "@/components/custom/CartItem";
 import PageLayout from "@/layouts/app-layout";
-import CheckOutController from "@/actions/App/Http/Controllers/CheckOutController"
+import CheckOutController from "@/actions/App/Http/Controllers/CheckOutController";
 
 function Index({
     csrf_token,

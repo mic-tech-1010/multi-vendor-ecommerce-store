@@ -33,7 +33,7 @@ class OrderViewResource extends JsonResource
                     'title' => $item->product->title,
                     'slug' => $item->product->slug,
                     'description' => $item->product->description,
-                    'image' =>$item->product->getImageForOptions($item->variation_type_option_ids ?: []),
+                    //'image' =>$item->product->getImageForOptions($item->product_sku_id ?: null),
                 ]
             ])
         ];

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Enum\OrderStatusEnum;
 use App\Http\Resources\OrderViewResource;
+use App\Mail\CheckoutCompleted;
+use App\Mail\NewOrderMail;
 use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -96,6 +98,11 @@ class CheckOutController extends Controller
                 'customer_email' => $request->user()->email,
                 'line_items' => $lineItems,
                 'mode' => 'payment',
+                'payment_intent_data' => [
+                    'metadata' => [
+                        'order_ids' => collect($orders)->pluck('id')->implode(',')
+                    ]
+                ],
                 'success_url' => route('stripe.success', []) . "?session_id={CHECKOUT_SESSION_ID}",
                 'cancel_url' => route('stripe.failure', [])
             ]);
@@ -177,30 +184,31 @@ class CheckOutController extends Controller
 
                 $totalAmount = $balanceTransaction['amount'];
                 $stripeFee = 0;
-                foreach ($balanceTransaction['fee_details'] as $feeDetail) {
-                    if ($feeDetail['type'] === 'stripe_fee') {
-                        $stripeFee = $feeDetail['amount'];
+                    foreach ($balanceTransaction['fee_details'] as $feeDetail) {
+                        if ($feeDetail['type'] === 'stripe_fee') {
+                            $stripeFee = $feeDetail['amount'];
+                        }
                     }
-                }
-                $platformFeePercent = config('app.platform_fee_pct');
+                    $platformFeePercent = config('app.platform_fee_pct');
 
-                foreach ($orders as $order) {
-                    $vendorShare = $order->total_price / $totalAmount;
+                    foreach ($orders as $order) {
+                        $vendorShare = $order->total_price / $totalAmount;
 
-                    $order->online_payment_comission = $vendorShare * $stripeFee;
-                    $order->website_comission = ($order->total_price - $order->online_payment_comission) / 100 * $platformFeePercent;
-                    $order->vendor_subtotal = $order->total_price - $order->online_payment_comission - $order->website_comission;
+                        $order->online_payment_comission = $vendorShare * $stripeFee;
+                        $order->website_comission = ($order->total_price - $order->online_payment_comission) / 100 * $platformFeePercent;
+                        $order->vendor_subtotal = $order->total_price - $order->online_payment_comission - $order->website_comission;
 
-                    $order->save();
+                        $order->save();
 
-                    // send email to vendor user
+                        // send email to vendor user
 
-                    Mail::to($order->vendorUser->email)->send(new NewOrderMail($order));
-                }
+                      Mail::to($order->vendorUser->email)->queue(new NewOrderMail($order));
+                    }
 
-                //send email to buyer
+                    // send email to buyer
 
-                Mail::to($orders[0]->user)->send(new CheckoutCompleted($orders));
+                   Mail::to($orders[0]->user->email)->queue(new CheckoutCompleted($orders));
+
 
             case 'checkout.session.completed':
                 $session = $event->data->object; // contains a \Stripe\Checkout\Session
@@ -225,34 +233,40 @@ class CheckOutController extends Controller
 
                     foreach ($order->orderItems as $orderItem) {
                         // Reduce product stock logic here
-                        $options = $orderItem->variation_type_option_ids;
                         $product = $orderItem->product;
 
-                        if ($options) {
-                            sort($options);
-                            $variation = $product->variations()
-                                ->where('variation_type_option_ids', $options)
+                        if ($orderItem->product_sku_id) {
+
+                            $variation = $product->skus()
+                                ->where('id', $orderItem->product_sku_id)
                                 ->first();
 
-                            if ($variation && $variation->quantity != null) {
+                            if ($variation && $variation->quantity !== null) {
                                 $variation->quantity -= $orderItem->quantity;
                                 $variation->save();
-                            } else if ($product->quantity != null) {
+                            }
+                        } else {
+
+                            if ($product->quantity !== null) {
                                 $product->quantity -= $orderItem->quantity;
                                 $product->save();
                             }
                         }
                     }
                 }
+
                 CartItem::query()
                     ->where('user_id', $order->user_id)
                     ->whereIn('product_id', $productsToBeDeltedFromCart)
                     ->where('saved_for_later', false)
                     ->delete();
 
+
             default:
                 echo 'Received unknown event type ' . $event->type;
         }
+
         return response('', 200);
     }
+
 }

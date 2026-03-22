@@ -17,6 +17,9 @@ Route::controller(CartController::class)->group(function () {
     Route::delete('/cart/{product}', 'destroy')->name('cart.destroy');
 });
 
+Route::post('/stripe/webhook', [CheckOutController::class, 'webhook'])
+    ->name('stripe.webhook');
+
 Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('/cart/checkout', [CheckOutController::class, 'checkout'])

@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\NewOrderMail;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Services\CartService;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Mail;
 
 class CartController extends Controller
 {
@@ -14,6 +18,7 @@ class CartController extends Controller
      */
     public function index(CartService $cartService)
     {
+
         return Inertia::render('cart/index', [
             'cartItems' => $cartService->getCartItemsGrouped(),
         ]);

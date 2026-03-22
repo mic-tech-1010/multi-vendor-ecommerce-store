@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('orders', function (Blueprint $table) {
+
             Schema::create('orders', function (Blueprint $table) {
                 $table->id();
                 $table->decimal('total_price', 20, 4);
@@ -26,7 +26,7 @@ return new class extends Migration
                 $table->string('payment_intent')->nullable();
                 $table->timestamps();
             });
-        });
+
     }
 
     /**
