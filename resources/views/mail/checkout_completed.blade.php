@@ -39,31 +39,31 @@
                     </tr>
 </thead>
 <tbody>
-                    @foreach ($order->orderItems as $orderItem)
-                        <tr>
-                            <td>
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td padding="5" style="padding-right: 5px;">
+@foreach ($order->orderItems as $orderItem)
+<tr>
+<td>
+<table>
+<tbody>
+<tr>
+<td padding="5" style="padding-right: 5px;">
                                                 <img src="{{ $orderItem->product->getFirstMediaUrl('product_images', 'thumb') }}"
                                                     alt="{{ $orderItem->product->name }}" width="50">
-                                            </td>
-                                            <td>
+</td>
+<td>
                                                 {{ $orderItem->product->name }}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                            <td>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
                                 {{ $orderItem->quantity }}
-                            </td>
-                            <td>
+</td>
+<td>
                                 ${{ \Illuminate\Support\Number::currency($orderItem->price) }}
-                            </td>
-                        </tr>
-                    @endforeach
+</td>
+</tr>
+@endforeach
 </tbody>
 </table>
 </x-mail::table>

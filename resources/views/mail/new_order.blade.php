@@ -1,4 +1,5 @@
 <x-mail::message>
+   <pre> @dump($order->orderItems)</pre>
 <h1 style="text-align: center; font-size: 24px">
         Congratulations! You have a new Order
 </h1>
@@ -13,7 +14,7 @@
 
 <x-mail::table>
 <table>
-{{-- <tbody>
+<tbody>
                 <tr>
                     <td>Order # </td>
                     <td>{{ $order->id }}</td>
@@ -38,7 +39,7 @@
                     <td>Your Earnings</td>
                     <td>{{ \Illuminate\Support\Number::currency($order->vendor_subtotal ?: 0) }}</td>
                 </tr>
-</tbody> --}}
+</tbody>
 </table>
 </x-mail::table>
 
@@ -53,34 +54,34 @@
                     <th>Price</th>
                 </tr>
 </thead>
-{{-- <tbody>
-                @foreach ($order->orderItems as $orderItem)
-                    <tr>
-                        <td>
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td padding="5" style="padding: 5px">
+<tbody>
+@foreach ($order->orderItems as $orderItem)
+<tr>
+<td>
+<table>
+<tbody>
+<tr>
+<td padding="5" style="padding: 5px">
                                             <img style="min-width: 60px; max-width: 60px"
-                                                src={{ $orderItem->product->getImageForOptions($orderItem->product_sku_id) }}
-                                                alt="">
-                                        </td>
-                                        <td>
-                                            {{ $orderItem->product->title }}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </td>
-                        <td>
+                                                src="{{ $orderItem->product->getImageForOptions($orderItem->product_sku_id) }}"
+                                                alt="{{ $orderItem->product->title }}">
+</td>
+<td>
+                {{ $orderItem->product->title }}
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
                             {{ $orderItem->quantity }}
-                        </td>
-                        <td>
+</td>
+<td>
                             ${{ \Illuminate\Support\Number::currency($orderItem->price) }}
-                        </td>
-                    </tr>
-                @endforeach
-</tbody> --}}
+</td>
+</tr>
+@endforeach
+</tbody>
 </table>
 </x-mail::table>
 
